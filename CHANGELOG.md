@@ -1,21 +1,9 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.1.0 - MVP
 
-This project follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
-format and uses semantic versioning when versioned releases are published.
-
-## [Unreleased]
-
-### Added
-
-- Initial project setup.
-
-## Release Links
-
-- Unreleased:
-  `https://github.com/rogerchappel/tailmux/compare/...HEAD`
-- Latest release:
-  `https://github.com/rogerchappel/tailmux/releases/latest`
-
-Replace placeholder links once the first release tag exists.
+- Scaffolded the public OSS CLI package.
+- Added fixture-backed Tailscale status parsing.
+- Added SSH config alias parsing.
+- Added inventory, health, status, template, and dry-run plan commands.
+- Added deterministic fixtures, unit tests, smoke checks, and validation docs.
