@@ -1,0 +1,11 @@
+Host atlas-mac atlas
+  HostName atlas-mac.tailnet.ts.net
+  User roger
+
+Host gpu-box gpu
+  HostName gpu-box.tailnet.ts.net
+  User roger
+  Port 2222
+
+Host *.example.invalid
+  User nobody
