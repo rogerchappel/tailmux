@@ -1,0 +1,9 @@
+{
+  "atlas-mac": [
+    { "name": "openclaw", "port": 3210, "open": true }
+  ],
+  "gpu-box": [
+    { "name": "ollama", "port": 11434, "open": true },
+    { "name": "trainer", "port": 7860, "open": false }
+  ]
+}
