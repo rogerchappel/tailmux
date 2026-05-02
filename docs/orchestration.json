@@ -1,0 +1,27 @@
+{
+  "name": "tailmux",
+  "version": 1,
+  "mode": "local-first-dry-run",
+  "inputs": [
+    "tailscale status JSON fixture",
+    "SSH config fixture",
+    "service port fixture"
+  ],
+  "outputs": [
+    "status board",
+    "tmux session template",
+    "dry-run command plan"
+  ],
+  "forbiddenByDefault": [
+    "network calls",
+    "ssh execution",
+    "tmux execution",
+    "destructive writes",
+    "secret sync"
+  ],
+  "commands": {
+    "status": "Render inventory health",
+    "template": "Generate session template",
+    "plan": "Print reviewable commands"
+  }
+}
