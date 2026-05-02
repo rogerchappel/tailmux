@@ -1,0 +1,30 @@
+{
+  "Self": {
+    "ID": "selfid",
+    "HostName": "atlas-mac",
+    "DNSName": "atlas-mac.tailnet.ts.net.",
+    "TailscaleIPs": ["100.64.0.10"],
+    "Online": true,
+    "OS": "macOS",
+    "User": "roger@example.com"
+  },
+  "Peer": {
+    "peer1": {
+      "HostName": "gpu-box",
+      "DNSName": "gpu-box.tailnet.ts.net.",
+      "TailscaleIPs": ["100.64.0.20"],
+      "Online": true,
+      "OS": "linux",
+      "User": "roger@example.com",
+      "Tags": ["tag:ai"]
+    },
+    "peer2": {
+      "HostName": "logs-mini",
+      "DNSName": "logs-mini.tailnet.ts.net.",
+      "TailscaleIPs": ["100.64.0.30"],
+      "Online": false,
+      "OS": "macOS",
+      "User": "roger@example.com"
+    }
+  }
+}
