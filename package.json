@@ -11,11 +11,11 @@
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/src/index.js"
     }
   },
   "files": [
-    "dist",
+    "dist/src",
     "fixtures",
     "examples",
     "README.md",
@@ -32,10 +32,18 @@
     "fixtures:scan": "node dist/src/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt",
     "validate": "bash scripts/validate.sh"
   },
-  "keywords": ["tailscale", "tmux", "ssh", "cli", "local-first"],
+  "keywords": [
+    "tailscale",
+    "tmux",
+    "ssh",
+    "cli",
+    "local-first"
+  ],
   "author": "Roger Chappel",
   "license": "MIT",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
