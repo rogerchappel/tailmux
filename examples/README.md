@@ -5,5 +5,5 @@
 Preview without executing:
 
 ```bash
-node dist/cli.js launch examples/ai-lab.json
+node dist/src/cli.js launch examples/ai-lab.json
 ```

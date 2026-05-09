@@ -4,13 +4,13 @@
   "description": "Tailscale-aware tmux workspace launcher and status board.",
   "type": "module",
   "bin": {
-    "tailmux": "./dist/cli.js"
+    "tailmux": "./dist/src/cli.js"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/index.js"
     }
   },
@@ -26,10 +26,10 @@
     "check": "tsc --noEmit",
     "test": "node --test dist/tests/*.test.js",
     "pretest": "npm run build",
-    "smoke": "node dist/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt --format json >/tmp/tailmux-smoke.json && node dist/cli.js template examples/ai-lab.json --dry-run",
+    "smoke": "node dist/src/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt --format json >/tmp/tailmux-smoke.json && node dist/src/cli.js template examples/ai-lab.json --dry-run",
     "package:smoke": "npm pack --dry-run",
     "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke",
-    "fixtures:scan": "node dist/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt",
+    "fixtures:scan": "node dist/src/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt",
     "validate": "bash scripts/validate.sh"
   },
   "keywords": ["tailscale", "tmux", "ssh", "cli", "local-first"],
