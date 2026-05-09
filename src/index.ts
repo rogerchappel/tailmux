@@ -9,3 +9,4 @@ export { normalizeDnsName, parseTailscaleStatus } from "./tailscale.js";
 export { parseWorkspaceTemplate, stringifyWorkspaceTemplate } from "./template.js";
 export { requiresExplicitExecution, summarizeRisks } from "./safety.js";
 export { TailmuxError, invariant } from "./errors.js";
+export { summarizeHealth, type HealthSummary } from "./health.js";
