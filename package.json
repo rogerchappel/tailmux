@@ -29,6 +29,7 @@
     "smoke": "node dist/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt --format json >/tmp/tailmux-smoke.json && node dist/cli.js template examples/ai-lab.json --dry-run",
     "package:smoke": "npm pack --dry-run",
     "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke",
+    "fixtures:scan": "node dist/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt",
     "validate": "bash scripts/validate.sh"
   },
   "keywords": ["tailscale", "tmux", "ssh", "cli", "local-first"],
