@@ -7,7 +7,7 @@ import { renderInventoryJson, renderInventoryTable } from "./render.js";
 import { parseWorkspaceTemplate, stringifyWorkspaceTemplate } from "./template.js";
 import { minimalTemplate } from "./template-presets.js";
 
-interface ParsedArgs { command?: string; positional: string[]; flags: Record<string, string | boolean>; }
+interface ParsedArgs { command?: string | undefined; positional: string[]; flags: Record<string, string | boolean>; }
 
 function parseArgs(argv: string[]): ParsedArgs {
   const parsed: ParsedArgs = { positional: [], flags: {} };
@@ -61,7 +61,9 @@ async function run(): Promise<number> {
     for (const plan of plans) process.stdout.write(`${plan.risk.padEnd(18)} ${formatCommand(plan.command)}\n`);
     if (args.flags.execute === true) {
       for (const plan of plans) {
-        const result = spawnSync(plan.command[0], plan.command.slice(1), { stdio: "inherit" });
+        const executable = plan.command[0];
+        if (!executable) throw new Error("empty command plan");
+        const result = spawnSync(executable, plan.command.slice(1), { stdio: "inherit" });
         if (result.status !== 0) return result.status ?? 1;
       }
     }

@@ -10,10 +10,10 @@ import type { Inventory } from "./types.js";
 const execFileAsync = promisify(execFile);
 
 export interface DiscoveryOptions {
-  tailscalePath?: string;
-  sshConfigPath?: string;
-  portsPath?: string;
-  live?: boolean;
+  tailscalePath?: string | undefined;
+  sshConfigPath?: string | undefined;
+  portsPath?: string | undefined;
+  live?: boolean | undefined;
 }
 
 async function readOptional(path: string | undefined): Promise<string | undefined> {
