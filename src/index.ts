@@ -10,3 +10,4 @@ export { parseWorkspaceTemplate, stringifyWorkspaceTemplate } from "./template.j
 export { requiresExplicitExecution, summarizeRisks } from "./safety.js";
 export { TailmuxError, invariant } from "./errors.js";
 export { summarizeHealth, type HealthSummary } from "./health.js";
+export { minimalTemplate } from "./template-presets.js";
