@@ -5,6 +5,7 @@ import { discoverInventory } from "./discovery.js";
 import { formatCommand, planTmux } from "./planner.js";
 import { renderInventoryJson, renderInventoryTable } from "./render.js";
 import { parseWorkspaceTemplate, stringifyWorkspaceTemplate } from "./template.js";
+import { minimalTemplate } from "./template-presets.js";
 
 interface ParsedArgs { command?: string; positional: string[]; flags: Record<string, string | boolean>; }
 
@@ -25,7 +26,8 @@ function parseArgs(argv: string[]): ParsedArgs {
 }
 
 function usage(): string {
-  return `tailmux - local-first Tailscale/tmux workspace helper\n\nCommands:\n  scan [--tailscale file] [--ssh-config file] [--ports file] [--live] [--format table|json]\n  template <file> [--dry-run]\n  launch <file> [--execute]\n  status [same flags as scan]\n\nSafety:\n  tailmux does not call Tailscale, SSH, or tmux unless --live or --execute is supplied.\n`;
+  return `tailmux - local-first Tailscale/tmux workspace helper\n\nCommands:\n  scan [--tailscale file] [--ssh-config file] [--ports file] [--live] [--format table|json]\n  template <file> [--dry-run]
+  init-template [--session name]\n  launch <file> [--execute]\n  status [same flags as scan]\n\nSafety:\n  tailmux does not call Tailscale, SSH, or tmux unless --live or --execute is supplied.\n`;
 }
 
 function flagString(flags: Record<string, string | boolean>, name: string): string | undefined {
@@ -44,6 +46,10 @@ async function run(): Promise<number> {
       live: args.flags.live === true
     });
     process.stdout.write(args.flags.format === "json" ? renderInventoryJson(inventory) : renderInventoryTable(inventory));
+    return 0;
+  }
+  if (args.command === "init-template") {
+    process.stdout.write(stringifyWorkspaceTemplate(minimalTemplate(flagString(args.flags, "session") ?? "tailmux")));
     return 0;
   }
   if (args.command === "template" || args.command === "launch") {
