@@ -1,0 +1,7 @@
+{
+  "Self": {"HostName":"work-mac","DNSName":"work-mac.tailnet.ts.net.","TailscaleIPs":["100.64.0.1"],"OS":"macOS","Online":true},
+  "Peer": {
+    "node1": {"HostName":"gpu-box","DNSName":"gpu-box.tailnet.ts.net.","TailscaleIPs":["100.64.0.2"],"OS":"linux","Online":true,"Tags":["tag:ai"]},
+    "node2": {"HostName":"mini-lab","DNSName":"mini-lab.tailnet.ts.net.","TailscaleIPs":["100.64.0.3"],"OS":"macOS","Online":false}
+  }
+}

@@ -1,0 +1,11 @@
+Host gpu
+  HostName gpu-box.tailnet.ts.net
+  User roger
+  Port 22
+
+Host mini
+  HostName mini-lab.tailnet.ts.net
+  User roger
+
+Host *
+  ForwardAgent no

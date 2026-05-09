@@ -1,0 +1,10 @@
+{
+  "name": "AI lab",
+  "description": "Open a local monitor plus remote GPU and dev panes.",
+  "session": "ai-lab",
+  "panes": [
+    { "title": "local", "command": "pwd" },
+    { "title": "gpu", "host": "gpu", "command": "nvidia-smi || uname -a" },
+    { "title": "logs", "host": "mini", "cwd": "~/projects/app", "command": "tail -f logs/dev.log" }
+  ]
+}
