@@ -1,58 +1,23 @@
 # Security Policy
 
-## Supported Versions
-
-Replace this section with the supported versions for `tailmux`.
-
-Example:
-
-```md
-| Version | Supported |
-| --- | --- |
-| .x | Yes |
-| < .0 | No |
-```
-
-If the project does not publish versioned releases yet, say that clearly.
-
-## Reporting a Vulnerability
-
-Please do not report suspected vulnerabilities in public issues, pull requests, or discussions.
-
-Ask maintainers for the private security reporting path before sharing details.
-
-If no private reporting path exists yet, ask maintainers through public project channels for a private reporting path. Do not include exploit details, secrets, personal data, or sensitive technical details in public messages.
-
-## What to Include
-
-When a private reporting path is available, include:
-
-- A clear description of the issue.
-- Affected versions, files, packages, workflows, or configuration.
-- Steps to reproduce, proof of concept, or attack scenario when safe to share.
-- Potential impact.
-- Suggested mitigation, if known.
-
-## Response Expectations
-
-Maintainers review good-faith reports as capacity allows.
-
-Do not imply paid support, guaranteed response times, guaranteed fixes, or service-level agreements unless `tailmux` explicitly provides them.
+`tailmux` is a local-first orchestration helper. Please report security issues privately through GitHub security advisories when available.
 
 ## Scope
 
 In scope:
 
-- Vulnerabilities in tailmux.
-- Insecure default configuration shipped by this project.
-- CI, release, or dependency guidance maintained by this project.
+- Hidden network calls or command execution without `--live` / `--execute`.
+- Command rendering bugs that hide or materially change SSH/tmux execution.
+- Template validation bypasses that cause unexpected local execution.
 
 Out of scope:
 
-- General support requests.
-- Requests for guaranteed maintenance timelines.
-- Issues in unrelated downstream projects.
+- Commands that a user explicitly places in a workspace template and runs with `--execute`.
+- Security of Tailscale, SSH, tmux, shells, or remote hosts themselves.
 
-## Disclosure
+## Design commitments
 
-Coordinate disclosure with maintainers before publishing vulnerability details.
+- `scan` reads files unless `--live` is supplied.
+- `launch` prints plans unless `--execute` is supplied.
+- No credentials are stored, synced, or transmitted by `tailmux`.
+- No telemetry is collected.
