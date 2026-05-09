@@ -1,0 +1,13 @@
+{
+  "name": "tailmux-mvp",
+  "version": 1,
+  "defaultMode": "dry-run",
+  "commands": [
+    { "name": "scan", "network": "none unless --live", "writes": false },
+    { "name": "status", "network": "none unless --live", "writes": false },
+    { "name": "template", "network": "none", "writes": false },
+    { "name": "launch", "network": "ssh only inside tmux panes when --execute", "writes": "local tmux session when --execute" }
+  ],
+  "requiredConsentFlags": ["--live", "--execute"],
+  "forbiddenByDesign": ["secret sync", "remote file mutation", "implicit GitHub or package publishing"]
+}
