@@ -1,3 +1,4 @@
+import { summarizeHealth } from "./health.js";
 import type { Inventory } from "./types.js";
 
 export function renderInventoryTable(inventory: Inventory): string {
@@ -12,6 +13,8 @@ export function renderInventoryTable(inventory: Inventory): string {
       ports || "-"
     ].join(" "));
   }
+  const summary = summarizeHealth(inventory);
+  lines.push(`\n${summary.onlinePeers}/${summary.totalPeers} peers online; ${summary.knownPorts} known ports.`);
   return `${lines.join("\n")}\n`;
 }
 
