@@ -89,3 +89,22 @@ bash scripts/validate.sh
 ## License
 
 MIT
+
+## Security
+
+`tailmux` is local-first and does not call Tailscale, SSH, or tmux without explicit opt-in:
+
+- No network calls or live discovery unless `--live` is passed
+- No tmux sessions created unless `--execute` is passed
+- All output is deterministic when using `--format json`
+- No telemetry, analytics, or external services
+
+Workspace templates and fixture files are **not** executed as code — they are parsed for hostnames, commands, and pane layouts. Commands listed in templates are printed for review and only executed with `--execute`.
+
+## Limitations
+
+- Workspace templates assume tmux is installed on the host machine
+- Tailscale live discovery requires the `tailscale` CLI to be available on PATH
+- SSH alias resolution only works with OpenSSH `~/.ssh/config` format
+- No support for WezTerm, iTerm2, or other terminal multiplexers
+- Requires Node.js 22+ for modern ESM module resolution
