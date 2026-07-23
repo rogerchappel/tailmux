@@ -12,6 +12,11 @@ npm run smoke
 bash scripts/validate.sh
 ```
 
+`npm test` builds the TypeScript sources and tests before running every compiled
+test file. It fails if no compiled tests are discovered. `npm run package:smoke`
+checks that the package dry run includes the runtime entry points, test runner,
+and a compiled JavaScript file for every TypeScript test.
+
 ## Principles
 
 - Keep default behavior deterministic and local-first.
