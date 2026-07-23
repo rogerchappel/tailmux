@@ -17,6 +17,7 @@
   "files": [
     "dist/src",
     "dist/tests",
+    "scripts/run-tests.mjs",
     "fixtures",
     "examples",
     "README.md",
@@ -28,7 +29,7 @@
   "scripts": {
     "build": "tsc",
     "check": "tsc --noEmit",
-    "test": "node --test dist/tests/*.test.js",
+    "test": "node scripts/run-tests.mjs",
     "pretest": "npm run build",
     "smoke": "node dist/src/cli.js scan --tailscale fixtures/tailscale-status.json --ssh-config fixtures/ssh_config --ports fixtures/ports.txt --format json >/tmp/tailmux-smoke.json && node dist/src/cli.js template examples/ai-lab.json --dry-run",
     "package:smoke": "npm pack --dry-run",
