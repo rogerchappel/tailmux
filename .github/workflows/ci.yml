@@ -19,6 +19,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm test
+      - name: Run tests and verify discovery
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee /tmp/tailmux-test-output.log
+          grep -E "Running [1-9][0-9]* compiled test files" /tmp/tailmux-test-output.log
+          grep -F "CLI scan emits JSON from fixtures" /tmp/tailmux-test-output.log
       - run: npm run smoke
       - run: bash scripts/validate.sh
