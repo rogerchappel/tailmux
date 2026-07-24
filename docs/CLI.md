@@ -19,3 +19,12 @@ Validate and normalize a workspace template.
 ## `tailmux launch <file>`
 
 Print a tmux command plan. Add `--execute` to run the plan.
+
+Options may appear before or after positional arguments, so both
+`tailmux launch --execute workspace.json` and
+`tailmux launch workspace.json --execute` are equivalent.
+
+## Option validation
+
+`--format` accepts only `table` or `json`. Unknown options, unsupported format
+values, and value-taking options without a value exit nonzero with a diagnostic.
