@@ -6,24 +6,7 @@ import { formatCommand, planTmux } from "./planner.js";
 import { renderInventoryJson, renderInventoryTable } from "./render.js";
 import { parseWorkspaceTemplate, stringifyWorkspaceTemplate } from "./template.js";
 import { minimalTemplate } from "./template-presets.js";
-
-interface ParsedArgs { command?: string | undefined; positional: string[]; flags: Record<string, string | boolean>; }
-
-function parseArgs(argv: string[]): ParsedArgs {
-  const parsed: ParsedArgs = { positional: [], flags: {} };
-  parsed.command = argv.shift();
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index];
-    if (!arg) continue;
-    if (arg.startsWith("--")) {
-      const key = arg.slice(2);
-      const next = argv[index + 1];
-      if (next && !next.startsWith("--")) { parsed.flags[key] = next; index += 1; }
-      else parsed.flags[key] = true;
-    } else parsed.positional.push(arg);
-  }
-  return parsed;
-}
+import { parseArgs } from "./cli-args.js";
 
 function usage(): string {
   return `tailmux - local-first Tailscale/tmux workspace helper\n\nCommands:\n  scan [--tailscale file] [--ssh-config file] [--ports file] [--live] [--format table|json]\n  template <file> [--dry-run]
