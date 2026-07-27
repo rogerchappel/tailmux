@@ -6,35 +6,41 @@ Tailscale-aware tmux session launcher and status board for jumping between local
 
 ## Install
 
-```bash
-npm install -g tailmux
-```
-
-From source:
+`tailmux` is not published to the npm registry. The registry package with this
+name is a different project. Install and run this repository from a source
+checkout:
 
 ```bash
-npm install
+git clone https://github.com/rogerchappel/tailmux.git
+cd tailmux
+npm ci
 npm run build
 node dist/src/cli.js help
 ```
 
+The project is configured for reviewed GitHub releases, rather than npm
+publishing. Until a release artifact is attached to a GitHub release, the source
+checkout above is the supported installation path.
+
 ## Quickstart with fixtures
 
+Run these commands from the built source checkout:
+
 ```bash
-tailmux scan \
+node dist/src/cli.js scan \
   --tailscale fixtures/tailscale-status.json \
   --ssh-config fixtures/ssh_config \
   --ports fixtures/ports.txt
 
-tailmux scan --tailscale fixtures/tailscale-status.json --format json
-tailmux template examples/ai-lab.json
-tailmux launch examples/ai-lab.json
+node dist/src/cli.js scan --tailscale fixtures/tailscale-status.json --format json
+node dist/src/cli.js template examples/ai-lab.json
+node dist/src/cli.js launch examples/ai-lab.json
 ```
 
 `launch` prints a tmux plan. To actually create the tmux session:
 
 ```bash
-tailmux launch examples/ai-lab.json --execute
+node dist/src/cli.js launch examples/ai-lab.json --execute
 ```
 
 ## Commands
@@ -49,7 +55,7 @@ tailmux launch examples/ai-lab.json --execute
 By default, `tailmux` makes no network calls and shells out to nothing. Add `--live` to ask the local Tailscale CLI for status:
 
 ```bash
-tailmux scan --live --ssh-config ~/.ssh/config
+node dist/src/cli.js scan --live --ssh-config ~/.ssh/config
 ```
 
 ## Template format
@@ -78,7 +84,7 @@ See [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md) and [SECURITY.md](SECURITY.md
 ## Development
 
 ```bash
-npm install
+npm ci
 npm run check
 npm test
 npm run build
@@ -107,4 +113,4 @@ Workspace templates and fixture files are **not** executed as code — they are 
 - Tailscale live discovery requires the `tailscale` CLI to be available on PATH
 - SSH alias resolution only works with OpenSSH `~/.ssh/config` format
 - No support for WezTerm, iTerm2, or other terminal multiplexers
-- Requires Node.js 22+ for modern ESM module resolution
+- Requires Node.js 20 or newer
