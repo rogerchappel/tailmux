@@ -39,6 +39,12 @@ test("CLI scan emits JSON from fixtures", () => {
   assert.equal(parsed.peers.some((peer: { name: string }) => peer.name === "gpu-box"), true);
 });
 
+test("CLI help exposes the documented source entry point", () => {
+  const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "help"], { encoding: "utf8" });
+  assert.match(stdout, /^tailmux - local-first Tailscale\/tmux workspace helper/);
+  assert.match(stdout, /scan \[--tailscale file\]/);
+});
+
 test("CLI launch is dry-run by default", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "launch", "examples/ai-lab.json"], { encoding: "utf8" });
   assert.match(stdout, /tmux new-session/);
