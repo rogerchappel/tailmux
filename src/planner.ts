@@ -23,10 +23,10 @@ export function planTmux(template: WorkspaceTemplate): CommandPlan[] {
     command: ["tmux", "new-session", "-d", "-s", template.session, "-n", first.title, paneCommand(first)],
     risk: first.host ? "remote-interactive" : "local-write"
   });
-  rest.forEach((pane, index) => {
+  rest.forEach((pane) => {
     plans.push({
       label: `add pane ${pane.title}`,
-      command: ["tmux", "split-window", "-t", `${template.session}:0.${index}`, paneCommand(pane)],
+      command: ["tmux", "split-window", "-t", template.session, paneCommand(pane)],
       risk: pane.host ? "remote-interactive" : "local-write"
     });
   });
