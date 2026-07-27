@@ -107,6 +107,10 @@ MIT
 
 Workspace templates and fixture files are **not** executed as code — they are parsed for hostnames, commands, and pane layouts. Commands listed in templates are printed for review and only executed with `--execute`.
 
+Generated launch plans target the new tmux session instead of fixed window and
+pane numbers, so custom `base-index` and `pane-base-index` settings are
+supported.
+
 ## Limitations
 
 - Workspace templates assume tmux is installed on the host machine
