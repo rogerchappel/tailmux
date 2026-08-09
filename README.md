@@ -115,6 +115,9 @@ supported.
 
 - Workspace templates assume tmux is installed on the host machine
 - Tailscale live discovery requires the `tailscale` CLI to be available on PATH
-- SSH alias resolution only works with OpenSSH `~/.ssh/config` format
+- SSH alias resolution supports concrete, positive `Host` aliases in OpenSSH
+  `~/.ssh/config` files. Wildcard and negated patterns are excluded; quoted
+  option values and comments are parsed without treating quoted `#` characters
+  as comments.
 - No support for WezTerm, iTerm2, or other terminal multiplexers
 - Requires Node.js 20 or newer
