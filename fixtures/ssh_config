@@ -1,4 +1,4 @@
-Host gpu
+Host gpu gpu-admin !gpu-disabled
   HostName gpu-box.tailnet.ts.net
   User roger
   Port 22
@@ -6,6 +6,10 @@ Host gpu
 Host mini
   HostName mini-lab.tailnet.ts.net
   User roger
+
+Host quoted
+  HostName "quoted#host.tailnet.ts.net" # quoted hashes are data
+  IdentityFile "~/.ssh/key #1"
 
 Host *
   ForwardAgent no
