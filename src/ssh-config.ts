@@ -6,21 +6,55 @@ export interface SshHost {
   identityFile?: string;
 }
 
-const ignoredAliases = new Set(["*", "?"]);
+function tokenize(line: string): string[] {
+  const tokens: string[] = [];
+  let token = "";
+  let quote: "'" | '"' | undefined;
+
+  const finishToken = () => {
+    if (token) tokens.push(token);
+    token = "";
+  };
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === "\\" && index + 1 < line.length) {
+      token += line[index + 1];
+      index += 1;
+      continue;
+    }
+    if (quote) {
+      if (character === quote) quote = undefined;
+      else token += character;
+      continue;
+    }
+    if (character === '"' || character === "'") {
+      quote = character;
+      continue;
+    }
+    if (character === "#") break;
+    if (character && /\s/.test(character)) {
+      finishToken();
+      continue;
+    }
+    token += character;
+  }
+  finishToken();
+  return tokens;
+}
 
 export function parseSshConfig(input: string): SshHost[] {
   const hosts: SshHost[] = [];
   let current: SshHost[] = [];
 
   for (const raw of input.split(/\r?\n/)) {
-    const line = raw.replace(/#.*/, "").trim();
-    if (!line) continue;
-    const [keywordRaw, ...rest] = line.split(/\s+/);
+    const [keywordRaw, ...rest] = tokenize(raw);
+    if (!keywordRaw) continue;
     const keyword = keywordRaw?.toLowerCase();
     const value = rest.join(" ");
     if (keyword === "host") {
       current = rest
-        .filter((alias) => alias && !alias.includes("*") && !alias.includes("?") && !ignoredAliases.has(alias))
+        .filter((alias) => alias && !alias.startsWith("!") && !alias.includes("*") && !alias.includes("?"))
         .map((alias) => ({ alias }));
       hosts.push(...current);
       continue;
