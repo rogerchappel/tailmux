@@ -1,5 +1,9 @@
 import type { Port } from "./types.js";
 
+function isValidPort(port: number): boolean {
+  return Number.isInteger(port) && port >= 1 && port <= 65535;
+}
+
 export function parsePorts(input: string, host = "local"): Port[] {
   const ports: Port[] = [];
   for (const raw of input.split(/\r?\n/)) {
@@ -9,7 +13,7 @@ export function parsePorts(input: string, host = "local"): Port[] {
     if (tcpMatch) {
       const protocol = ((tcpMatch[1] ?? tcpMatch[4])?.toLowerCase() ?? "unknown") as Port["protocol"];
       const port = Number.parseInt(tcpMatch[2] ?? tcpMatch[5] ?? "0", 10);
-      if (Number.isFinite(port) && port > 0) {
+      if (isValidPort(port)) {
         ports.push({
           host,
           port,
@@ -22,9 +26,11 @@ export function parsePorts(input: string, host = "local"): Port[] {
     }
     const simple = line.match(/^(?<host>[\w.-]+)\s+(?<port>\d+)\s+(?<protocol>tcp|udp)(?:\s+(?<process>\S+))?/i);
     if (simple?.groups) {
+      const port = Number.parseInt(simple.groups.port ?? "0", 10);
+      if (!isValidPort(port)) continue;
       ports.push({
         host: simple.groups.host ?? host,
-        port: Number.parseInt(simple.groups.port ?? "0", 10),
+        port,
         protocol: (simple.groups.protocol?.toLowerCase() ?? "unknown") as Port["protocol"],
         process: simple.groups.process
       });
