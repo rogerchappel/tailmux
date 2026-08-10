@@ -28,3 +28,12 @@ Options may appear before or after positional arguments, so both
 
 `--format` accepts only `table` or `json`. Unknown options, unsupported format
 values, and value-taking options without a value exit nonzero with a diagnostic.
+
+`scan`, `status`, and `init-template` do not accept positional arguments.
+`template` and `launch` require exactly one template file. Missing or extra
+positional arguments exit nonzero with a concise diagnostic.
+
+Port-file entries are included only when their parsed port is an integer from
+1 through 65535. This applies to both simplified rows such as
+`gpu-box 11434 tcp ollama` and listener-style rows such as
+`TCP 127.0.0.1:8080 (node)`.
