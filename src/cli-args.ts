@@ -71,5 +71,16 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     throw new Error(`unsupported --format value: ${format} (expected table or json)`);
   }
 
+  if (command === "scan" || command === "status" || command === "init-template") {
+    if (parsed.positional.length > 0) {
+      throw new Error(`${command} does not accept positional arguments`);
+    }
+  }
+  if (command === "template" || command === "launch") {
+    if (parsed.positional.length !== 1) {
+      throw new Error(`${command} requires exactly one template file`);
+    }
+  }
+
   return parsed;
 }
