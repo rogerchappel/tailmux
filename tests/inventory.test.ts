@@ -11,3 +11,39 @@ test("mergePeers joins SSH aliases onto Tailscale hosts", () => {
   assert.equal(peers[0]?.user, "roger");
   assert.equal(peers[0]?.aliases.includes("gpu"), true);
 });
+
+test("mergePeers joins SSH aliases addressed by a Tailscale IP", () => {
+  const peers = mergePeers([
+    {
+      name: "gpu-box",
+      host: "gpu-box.tailnet.ts.net",
+      online: true,
+      addresses: ["100.1.1.1", "fd7a:115c:a1e0::1"],
+      aliases: ["gpu-box.tailnet.ts.net"],
+      source: ["tailscale"],
+      tags: ["tag:ai"]
+    }
+  ], [{ alias: "gpu", hostName: "100.1.1.1", user: "roger" }]);
+
+  assert.deepEqual(peers, [{
+    name: "gpu-box",
+    host: "gpu-box.tailnet.ts.net",
+    online: true,
+    addresses: ["100.1.1.1", "fd7a:115c:a1e0::1"],
+    aliases: ["gpu-box.tailnet.ts.net", "gpu"],
+    source: ["tailscale", "ssh"],
+    tags: ["tag:ai"],
+    user: "roger"
+  }]);
+});
+
+test("mergePeers preserves distinct peers when their derived keys collide", () => {
+  const peers = mergePeers([
+    { name: "primary", host: "primary.tailnet.ts.net", online: true, addresses: ["100.1.1.1"], aliases: [], source: ["tailscale"], tags: ["tag:prod"] },
+    { name: "secondary", host: "secondary.tailnet.ts.net", online: false, addresses: ["100.1.1.1"], aliases: [], source: ["tailscale"], tags: ["tag:test"] }
+  ], []);
+
+  assert.deepEqual(peers.map((peer) => peer.name), ["primary", "secondary"]);
+  assert.deepEqual(peers[0]?.tags, ["tag:prod"]);
+  assert.deepEqual(peers[1]?.tags, ["tag:test"]);
+});
