@@ -7,6 +7,10 @@ Host mini
   HostName mini-lab.tailnet.ts.net
   User roger
 
+Host gpu-ip
+  HostName 100.64.0.2
+  User roger
+
 Host quoted
   HostName "quoted#host.tailnet.ts.net" # quoted hashes are data
   IdentityFile "~/.ssh/key #1"

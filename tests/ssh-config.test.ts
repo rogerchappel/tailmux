@@ -5,12 +5,13 @@ import { parseSshConfig } from "../src/ssh-config.js";
 
 test("parseSshConfig reads concrete Host blocks and ignores wildcards", () => {
   const hosts = parseSshConfig(readFileSync("fixtures/ssh_config", "utf8"));
-  assert.deepEqual(hosts.map((host) => host.alias), ["gpu", "gpu-admin", "mini", "quoted"]);
+  assert.deepEqual(hosts.map((host) => host.alias), ["gpu", "gpu-admin", "gpu-ip", "mini", "quoted"]);
   assert.equal(hosts[0]?.hostName, "gpu-box.tailnet.ts.net");
   assert.equal(hosts[0]?.user, "roger");
   assert.equal(hosts[1]?.hostName, "gpu-box.tailnet.ts.net");
-  assert.equal(hosts[3]?.hostName, "quoted#host.tailnet.ts.net");
-  assert.equal(hosts[3]?.identityFile, "~/.ssh/key #1");
+  assert.equal(hosts[2]?.hostName, "100.64.0.2");
+  assert.equal(hosts[4]?.hostName, "quoted#host.tailnet.ts.net");
+  assert.equal(hosts[4]?.identityFile, "~/.ssh/key #1");
 });
 
 test("parseSshConfig excludes negated and wildcard Host patterns", () => {
