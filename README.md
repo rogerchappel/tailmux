@@ -118,6 +118,8 @@ supported.
 - SSH alias resolution supports concrete, positive `Host` aliases in OpenSSH
   `~/.ssh/config` files. Wildcard and negated patterns are excluded; quoted
   option values and comments are parsed without treating quoted `#` characters
-  as comments.
+  as comments. An alias whose `HostName` is a Tailscale DNS name or any
+  Tailscale IP address is attached to that peer without replacing its
+  Tailscale metadata.
 - No support for WezTerm, iTerm2, or other terminal multiplexers
 - Requires Node.js 20 or newer

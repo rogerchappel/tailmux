@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Merge SSH aliases configured with any Tailscale peer address while preserving
+  the peer's DNS name, status, addresses, and tags.
 - Support custom tmux window and pane base indices when launching workspaces.
 - Correct installation guidance to use a source checkout while npm publishing
   is disabled and no GitHub release artifact is available.
