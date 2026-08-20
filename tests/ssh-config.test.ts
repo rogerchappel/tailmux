@@ -38,3 +38,39 @@ Host quoted # a real comment
     identityFile: "~/.ssh/key #1",
   }]);
 });
+
+test("parseSshConfig stops concrete hosts at Match and keeps first scalar values", () => {
+  const hosts = parseSshConfig(`
+Host box alias-box
+  HostName box.ts.net
+  User first
+  User second
+  Port 22
+  Port 2200
+Match host other
+  User matched
+  Port 2022
+`);
+
+  assert.deepEqual(hosts, [
+    { alias: "alias-box", hostName: "box.ts.net", user: "first", port: 22 },
+    { alias: "box", hostName: "box.ts.net", user: "first", port: 22 },
+  ]);
+});
+
+test("parseSshConfig resumes after Match at the next Host boundary", () => {
+  const hosts = parseSshConfig(`
+Host before
+  HostName before.ts.net
+Match all
+  User matched
+Host after
+  HostName after.ts.net
+  User roger
+`);
+
+  assert.deepEqual(hosts, [
+    { alias: "after", hostName: "after.ts.net", user: "roger" },
+    { alias: "before", hostName: "before.ts.net" },
+  ]);
+});
