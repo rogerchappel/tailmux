@@ -116,7 +116,8 @@ supported.
 - Workspace templates assume tmux is installed on the host machine
 - Tailscale live discovery requires the `tailscale` CLI to be available on PATH
 - SSH alias resolution supports concrete, positive `Host` aliases in OpenSSH
-  `~/.ssh/config` files. Wildcard and negated patterns are excluded; quoted
+  `~/.ssh/config` files, stops each stanza at `Match`, and does not evaluate
+  `Match` conditions or `Include` files. Wildcard and negated patterns are excluded; quoted
   option values and comments are parsed without treating quoted `#` characters
   as comments. An alias whose `HostName` is a Tailscale DNS name or any
   Tailscale IP address is attached to that peer without replacing its
