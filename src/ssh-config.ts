@@ -59,11 +59,18 @@ export function parseSshConfig(input: string): SshHost[] {
       hosts.push(...current);
       continue;
     }
+    if (keyword === "match") {
+      current = [];
+      continue;
+    }
     for (const host of current) {
-      if (keyword === "hostname") host.hostName = value;
-      if (keyword === "user") host.user = value;
-      if (keyword === "port") host.port = Number.parseInt(value, 10);
-      if (keyword === "identityfile") host.identityFile = value;
+      if (keyword === "hostname" && host.hostName === undefined) host.hostName = value;
+      if (keyword === "user" && host.user === undefined) host.user = value;
+      if (keyword === "port" && host.port === undefined) {
+        const port = Number.parseInt(value, 10);
+        if (Number.isFinite(port)) host.port = port;
+      }
+      if (keyword === "identityfile" && host.identityFile === undefined) host.identityFile = value;
     }
   }
 
