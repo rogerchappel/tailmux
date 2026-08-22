@@ -11,6 +11,12 @@ Host gpu-ip
   HostName 100.64.0.2
   User roger
 
+hOsT=gpu-equals
+  HOSTNAME=gpu-box.tailnet.ts.net
+  user=roger
+  Port=2222
+  IdentityFile="~/.ssh/gpu key"
+
 Host quoted
   HostName "quoted#host.tailnet.ts.net" # quoted hashes are data
   IdentityFile "~/.ssh/key #1"
