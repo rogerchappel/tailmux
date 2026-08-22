@@ -48,7 +48,12 @@ export function parseSshConfig(input: string): SshHost[] {
   let current: SshHost[] = [];
 
   for (const raw of input.split(/\r?\n/)) {
-    const [keywordRaw, ...rest] = tokenize(raw);
+    const [directive, ...trailing] = tokenize(raw);
+    if (!directive) continue;
+    const equalsIndex = directive.indexOf("=");
+    const keywordRaw = equalsIndex >= 0 ? directive.slice(0, equalsIndex) : directive;
+    const inlineValue = equalsIndex >= 0 ? directive.slice(equalsIndex + 1) : undefined;
+    const rest = inlineValue === undefined ? trailing : [inlineValue, ...trailing];
     if (!keywordRaw) continue;
     const keyword = keywordRaw?.toLowerCase();
     const value = rest.join(" ");
@@ -63,6 +68,7 @@ export function parseSshConfig(input: string): SshHost[] {
       current = [];
       continue;
     }
+    if (!value) continue;
     for (const host of current) {
       if (keyword === "hostname" && host.hostName === undefined) host.hostName = value;
       if (keyword === "user" && host.user === undefined) host.user = value;
