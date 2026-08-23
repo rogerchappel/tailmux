@@ -120,7 +120,9 @@ supported.
   `Match` conditions or `Include` files. Wildcard and negated patterns are excluded; quoted
   option values and comments are parsed without treating quoted `#` characters
   as comments. Supported directives are case-insensitive and accept both
-  `Keyword value` and `Keyword=value` OpenSSH forms. An alias whose `HostName` is a Tailscale DNS name or any
+  `Keyword value` and `Keyword=value` OpenSSH forms, including optional whitespace
+  around the `=` separator. Ports must be whole decimal values from 1 through
+  65535. An alias whose `HostName` is a Tailscale DNS name or any
   Tailscale IP address is attached to that peer without replacing its
   Tailscale metadata.
 - No support for WezTerm, iTerm2, or other terminal multiplexers
