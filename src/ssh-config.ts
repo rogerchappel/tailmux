@@ -53,7 +53,13 @@ export function parseSshConfig(input: string): SshHost[] {
     const equalsIndex = directive.indexOf("=");
     const keywordRaw = equalsIndex >= 0 ? directive.slice(0, equalsIndex) : directive;
     const inlineValue = equalsIndex >= 0 ? directive.slice(equalsIndex + 1) : undefined;
-    const rest = inlineValue === undefined ? trailing : [inlineValue, ...trailing];
+    let rest = inlineValue === undefined ? trailing : [...(inlineValue ? [inlineValue] : []), ...trailing];
+    if (inlineValue === undefined && rest[0] === "=") {
+      rest = rest.slice(1);
+    } else if (inlineValue === undefined && rest[0]?.startsWith("=")) {
+      const separatorValue = rest[0].slice(1);
+      rest = [...(separatorValue ? [separatorValue] : []), ...rest.slice(1)];
+    }
     if (!keywordRaw) continue;
     const keyword = keywordRaw?.toLowerCase();
     const value = rest.join(" ");
@@ -73,8 +79,9 @@ export function parseSshConfig(input: string): SshHost[] {
       if (keyword === "hostname" && host.hostName === undefined) host.hostName = value;
       if (keyword === "user" && host.user === undefined) host.user = value;
       if (keyword === "port" && host.port === undefined) {
-        const port = Number.parseInt(value, 10);
-        if (Number.isFinite(port)) host.port = port;
+        if (!/^\d+$/.test(value)) continue;
+        const port = Number(value);
+        if (port >= 1 && port <= 65535) host.port = port;
       }
       if (keyword === "identityfile" && host.identityFile === undefined) host.identityFile = value;
     }
