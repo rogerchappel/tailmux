@@ -17,6 +17,12 @@ hOsT=gpu-equals
   Port=2222
   IdentityFile="~/.ssh/gpu key"
 
+Host = gpu-spaced
+  HostName = gpu-box.tailnet.ts.net
+  User = roger
+  Port = 65535
+  IdentityFile = "~/.ssh/gpu spaced key"
+
 Host quoted
   HostName "quoted#host.tailnet.ts.net" # quoted hashes are data
   IdentityFile "~/.ssh/key #1"
