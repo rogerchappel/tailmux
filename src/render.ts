@@ -2,15 +2,20 @@ import { summarizeHealth } from "./health.js";
 import type { Inventory } from "./types.js";
 
 export function renderInventoryTable(inventory: Inventory): string {
-  const lines = ["NAME         HOST                         ONLINE  SOURCES      PORTS"];
+  const lines = ["NAME         HOST                         ONLINE  SOURCES      PORTS SSH ENDPOINTS"];
   for (const peer of inventory.peers) {
     const ports = inventory.ports.filter((port) => port.host === peer.name || port.host === peer.host).map((port) => `${port.port}/${port.protocol}`).join(",");
+    const endpoints = (peer.sshEndpoints ?? []).map((endpoint) => {
+      const destination = `${endpoint.user ? `${endpoint.user}@` : ""}${endpoint.hostName}${endpoint.port ? `:${endpoint.port}` : ""}`;
+      return `${endpoint.alias}=${destination}${endpoint.identityFile ? ` (${endpoint.identityFile})` : ""}`;
+    }).join(", ");
     lines.push([
       peer.name.padEnd(12),
       peer.host.padEnd(28),
       String(peer.online ?? "?").padEnd(7),
       peer.source.join(",").padEnd(12),
-      ports || "-"
+      (ports || "-").padEnd(5),
+      endpoints || "-"
     ].join(" "));
   }
   const summary = summarizeHealth(inventory);
