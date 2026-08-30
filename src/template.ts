@@ -6,6 +6,10 @@ function assertString(value: unknown, label: string): string {
   return value;
 }
 
+function optionalString(value: unknown, label: string): string | undefined {
+  return typeof value === "string" ? assertString(value, label) : undefined;
+}
+
 export function parseWorkspaceTemplate(input: string): WorkspaceTemplate {
   const raw = JSON.parse(input) as Record<string, unknown>;
   const panes = raw.panes;
@@ -19,9 +23,9 @@ export function parseWorkspaceTemplate(input: string): WorkspaceTemplate {
       const row = pane as Record<string, unknown>;
       return {
         title: assertString(row.title, `pane ${index}.title`),
-        host: typeof row.host === "string" ? row.host : undefined,
-        command: typeof row.command === "string" ? row.command : undefined,
-        cwd: typeof row.cwd === "string" ? row.cwd : undefined
+        host: optionalString(row.host, `pane ${index}.host`),
+        command: optionalString(row.command, `pane ${index}.command`),
+        cwd: optionalString(row.cwd, `pane ${index}.cwd`)
       };
     })
   };
