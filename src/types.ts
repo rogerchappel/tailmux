@@ -1,5 +1,13 @@
 export type PeerSource = "tailscale" | "ssh" | "template";
 
+export interface SshEndpoint {
+  alias: string;
+  hostName: string;
+  user?: string | undefined;
+  port?: number | undefined;
+  identityFile?: string | undefined;
+}
+
 export interface Peer {
   name: string;
   host: string;
@@ -10,6 +18,7 @@ export interface Peer {
   aliases: string[];
   source: PeerSource[];
   tags: string[];
+  sshEndpoints?: SshEndpoint[] | undefined;
 }
 
 export interface Port {

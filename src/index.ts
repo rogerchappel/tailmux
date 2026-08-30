@@ -1,4 +1,4 @@
-export type { CommandPlan, Inventory, Peer, Port, WorkspacePane, WorkspaceTemplate } from "./types.js";
+export type { CommandPlan, Inventory, Peer, Port, SshEndpoint, WorkspacePane, WorkspaceTemplate } from "./types.js";
 export { discoverInventory, type DiscoveryOptions } from "./discovery.js";
 export { createInventory, mergePeers } from "./inventory.js";
 export { formatCommand, paneCommand, planTmux } from "./planner.js";
