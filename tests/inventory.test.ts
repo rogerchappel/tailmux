@@ -33,8 +33,24 @@ test("mergePeers joins SSH aliases addressed by a Tailscale IP", () => {
     aliases: ["gpu-box.tailnet.ts.net", "gpu"],
     source: ["tailscale", "ssh"],
     tags: ["tag:ai"],
-    user: "roger"
+    user: "roger",
+    sshEndpoints: [{ alias: "gpu", hostName: "100.1.1.1", user: "roger" }]
   }]);
+});
+
+test("mergePeers preserves per-alias SSH connection settings", () => {
+  const peers = mergePeers([
+    { name: "gpu-box", host: "gpu-box.tailnet.ts.net", addresses: [], aliases: [], source: ["tailscale"], tags: [] }
+  ], [
+    { alias: "gpu-equals", hostName: "gpu-box.tailnet.ts.net", user: "roger", port: 2222, identityFile: "~/.ssh/gpu key" },
+    { alias: "gpu-spaced", hostName: "gpu-box.tailnet.ts.net", user: "roger", port: 65535, identityFile: "~/.ssh/gpu spaced key" }
+  ]);
+
+  assert.equal(peers.length, 1);
+  assert.deepEqual(peers[0]?.sshEndpoints, [
+    { alias: "gpu-equals", hostName: "gpu-box.tailnet.ts.net", user: "roger", port: 2222, identityFile: "~/.ssh/gpu key" },
+    { alias: "gpu-spaced", hostName: "gpu-box.tailnet.ts.net", user: "roger", port: 65535, identityFile: "~/.ssh/gpu spaced key" }
+  ]);
 });
 
 test("mergePeers preserves distinct peers when their derived keys collide", () => {
