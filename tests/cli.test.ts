@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { execFileSync, spawnSync } from "node:child_process";
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { parseArgs } from "../src/cli-args.js";
 
 test("CLI parser keeps boolean options separate from positionals", () => {
@@ -68,6 +71,17 @@ test("CLI launch is dry-run by default", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "launch", "examples/ai-lab.json"], { encoding: "utf8" });
   assert.match(stdout, /tmux new-session/);
   assert.match(stdout, /remote-interactive/);
+});
+
+test("CLI rejects an empty host instead of planning local execution", () => {
+  const directory = mkdtempSync(join(tmpdir(), "tailmux-empty-host-"));
+  const template = join(directory, "template.json");
+  writeFileSync(template, '{"name":"unsafe","session":"unsafe","panes":[{"title":"remote","host":"","command":"hostname"}]}');
+
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "launch", template], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /pane 0\.host must be a non-empty string/);
+  assert.doesNotMatch(result.stdout, /tmux|hostname/);
 });
 
 test("CLI reports invalid options with a nonzero exit", () => {
