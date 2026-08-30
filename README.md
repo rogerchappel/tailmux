@@ -124,6 +124,10 @@ supported.
   around the `=` separator. Ports must be whole decimal values from 1 through
   65535. An alias whose `HostName` is a Tailscale DNS name or any
   Tailscale IP address is attached to that peer without replacing its
-  Tailscale metadata.
+  Tailscale metadata. Each attached alias remains available in the peer's
+  `sshEndpoints` JSON array with its effective `alias`, `hostName`, `user`,
+  `port`, and `identityFile` values; aliases with different connection settings
+  are therefore not collapsed. Table output shows the same endpoints as
+  `alias=user@host:port (identityFile)`.
 - No support for WezTerm, iTerm2, or other terminal multiplexers
 - Requires Node.js 20 or newer
