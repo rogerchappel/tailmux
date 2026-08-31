@@ -36,3 +36,25 @@ test("parseWorkspaceTemplate permits omitted optional pane fields", () => {
   const template = parseWorkspaceTemplate('{"name":"local","session":"local","panes":[{"title":"shell"}]}');
   assert.deepEqual(template.panes, [{ title: "shell", host: undefined, command: undefined, cwd: undefined }]);
 });
+
+test("parseWorkspaceTemplate rejects supplied non-string optional pane fields", () => {
+  for (const field of ["host", "command", "cwd"] as const) {
+    for (const value of [null, false, 42, ["hostname"], { value: "hostname" }]) {
+      const input = JSON.stringify({
+        name: "invalid optional field",
+        session: "invalid-optional-field",
+        panes: [{ title: "pane", [field]: value }]
+      });
+      assert.throws(
+        () => parseWorkspaceTemplate(input),
+        (error: unknown) => {
+          assert.deepEqual(
+            { message: (error as Error).message, code: (error as { code?: string }).code },
+            { message: `pane 0.${field} must be a non-empty string`, code: "TAILMUX_TEMPLATE" }
+          );
+          return true;
+        }
+      );
+    }
+  }
+});

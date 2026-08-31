@@ -84,6 +84,24 @@ test("CLI rejects an empty host instead of planning local execution", () => {
   assert.doesNotMatch(result.stdout, /tmux|hostname/);
 });
 
+test("CLI rejects supplied non-string optional pane fields instead of dropping them", () => {
+  const directory = mkdtempSync(join(tmpdir(), "tailmux-invalid-pane-field-"));
+
+  for (const field of ["host", "command", "cwd"]) {
+    const template = join(directory, `${field}.json`);
+    writeFileSync(template, JSON.stringify({
+      name: "invalid",
+      session: "invalid",
+      panes: [{ title: "pane", [field]: 42 }]
+    }));
+
+    const result = spawnSync(process.execPath, ["dist/src/cli.js", "launch", template], { encoding: "utf8" });
+    assert.equal(result.status, 1, field);
+    assert.match(result.stderr, new RegExp(`pane 0\\.${field} must be a non-empty string`));
+    assert.doesNotMatch(result.stdout, /tmux/);
+  }
+});
+
 test("CLI reports invalid options with a nonzero exit", () => {
   const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--format", "yaml"], { encoding: "utf8" });
   assert.equal(result.status, 1);
