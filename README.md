@@ -74,7 +74,9 @@ node dist/src/cli.js scan --live --ssh-config ~/.ssh/config
 Each pane requires a non-empty `title`. The optional `host`, `command`, and
 `cwd` fields may be omitted, but when supplied they must be non-empty strings.
 In particular, use an omitted `host` for a local pane; an empty `host` is
-rejected rather than treated as local execution.
+rejected rather than treated as local execution. Non-string values such as
+`null`, numbers, arrays, and objects are also rejected with a field-specific
+`TAILMUX_TEMPLATE` error instead of being silently omitted from the plan.
 
 ## Safety
 

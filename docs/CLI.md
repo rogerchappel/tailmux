@@ -33,6 +33,11 @@ values, and value-taking options without a value exit nonzero with a diagnostic.
 `template` and `launch` require exactly one template file. Missing or extra
 positional arguments exit nonzero with a concise diagnostic.
 
+Workspace panes require a non-empty string `title`. Optional `host`, `command`,
+and `cwd` fields may be omitted; when present, each must be a non-empty string.
+Empty or non-string values fail with a field-specific `TAILMUX_TEMPLATE` error
+and cannot be silently dropped while creating a launch plan.
+
 Port-file entries are included only when their parsed port is an integer from
 1 through 65535. This applies to both simplified rows such as
 `gpu-box 11434 tcp ollama` and listener-style rows such as
