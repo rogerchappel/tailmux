@@ -7,7 +7,7 @@ function assertString(value: unknown, label: string): string {
 }
 
 function optionalString(value: unknown, label: string): string | undefined {
-  return typeof value === "string" ? assertString(value, label) : undefined;
+  return value === undefined ? undefined : assertString(value, label);
 }
 
 export function parseWorkspaceTemplate(input: string): WorkspaceTemplate {
