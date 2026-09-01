@@ -61,6 +61,18 @@ test("CLI scan emits JSON from fixtures", () => {
   assert.equal(parsed.peers.some((peer: { name: string }) => peer.name === "gpu-box"), true);
 });
 
+test("CLI scan reports malformed Tailscale status without leaking a TypeError", () => {
+  const directory = mkdtempSync(join(tmpdir(), "tailmux-invalid-tailscale-"));
+  const fixture = join(directory, "status.json");
+  writeFileSync(fixture, '{"Peer":[]}');
+
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--tailscale", fixture, "--format", "json"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: invalid Tailscale status: Peer must be an object\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /TypeError/);
+});
+
 test("CLI help exposes the documented source entry point", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "help"], { encoding: "utf8" });
   assert.match(stdout, /^tailmux - local-first Tailscale\/tmux workspace helper/);
