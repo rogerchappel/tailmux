@@ -58,6 +58,14 @@ By default, `tailmux` makes no network calls and shells out to nothing. Add `--l
 node dist/src/cli.js scan --live --ssh-config ~/.ssh/config
 ```
 
+Explicit files and live discovery accept the object shape emitted by
+`tailscale status --json`. The optional `Self` value and every value in the
+optional `Peer` object must be objects. When present, `HostName`, `DNSName`, and
+`OS` must be strings; `Online` must be a boolean; and `TailscaleIPs` and `Tags`
+must be arrays of strings. Malformed JSON or fields fail the command with an
+actionable `invalid Tailscale status` diagnostic instead of producing a partial
+inventory.
+
 ## Template format
 
 ```json
