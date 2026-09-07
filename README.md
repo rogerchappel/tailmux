@@ -68,6 +68,10 @@ inventory.
 
 ## Template format
 
+Templates must contain valid JSON with an object at the top level. The object
+requires non-empty string `name` and `session` fields and a non-empty `panes`
+array. An optional `description`, when present, must be a string.
+
 ```json
 {
   "name": "AI lab",
@@ -85,6 +89,8 @@ In particular, use an omitted `host` for a local pane; an empty `host` is
 rejected rather than treated as local execution. Non-string values such as
 `null`, numbers, arrays, and objects are also rejected with a field-specific
 `TAILMUX_TEMPLATE` error instead of being silently omitted from the plan.
+Malformed JSON, non-object top-level values, and malformed pane containers also
+fail with concise `TAILMUX_TEMPLATE` diagnostics rather than raw parser errors.
 
 ## Safety
 

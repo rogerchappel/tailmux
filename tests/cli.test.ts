@@ -114,6 +114,27 @@ test("CLI rejects supplied non-string optional pane fields instead of dropping t
   }
 });
 
+test("CLI reports malformed template structures without raw parser errors", () => {
+  const directory = mkdtempSync(join(tmpdir(), "tailmux-invalid-template-"));
+  const cases = [
+    { input: '{"name":', message: "template must be valid JSON" },
+    { input: "null", message: "template must be an object" },
+    { input: '[]', message: "template must be an object" },
+    { input: '{"name":"bad","description":42,"session":"bad","panes":[{"title":"pane"}]}', message: "template.description must be a string" },
+    { input: '{"name":"bad","session":"bad","panes":{}}', message: "template.panes must be a non-empty array" }
+  ];
+
+  for (const [index, testCase] of cases.entries()) {
+    const template = join(directory, `${index}.json`);
+    writeFileSync(template, testCase.input);
+    const result = spawnSync(process.execPath, ["dist/src/cli.js", "template", template], { encoding: "utf8" });
+    assert.equal(result.status, 1, testCase.message);
+    assert.equal(result.stderr, `tailmux: ${testCase.message}\n`);
+    assert.equal(result.stdout, "");
+    assert.doesNotMatch(result.stderr, /SyntaxError|TypeError/);
+  }
+});
+
 test("CLI reports invalid options with a nonzero exit", () => {
   const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--format", "yaml"], { encoding: "utf8" });
   assert.equal(result.status, 1);

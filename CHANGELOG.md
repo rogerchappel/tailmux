@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Report malformed JSON and invalid workspace template containers with stable
+  template-domain diagnostics instead of raw parser errors.
+
 - Merge SSH aliases configured with any Tailscale peer address while preserving
   the peer's DNS name, status, addresses, and tags.
 - Support custom tmux window and pane base indices when launching workspaces.
