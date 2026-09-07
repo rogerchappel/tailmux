@@ -1,4 +1,4 @@
-import { invariant, TailmuxError } from "./errors.js";
+import { TailmuxError } from "./errors.js";
 import type { WorkspaceTemplate } from "./types.js";
 
 function assertString(value: unknown, label: string): string {
@@ -11,12 +11,26 @@ function optionalString(value: unknown, label: string): string | undefined {
 }
 
 export function parseWorkspaceTemplate(input: string): WorkspaceTemplate {
-  const raw = JSON.parse(input) as Record<string, unknown>;
+  let value: unknown;
+  try {
+    value = JSON.parse(input) as unknown;
+  } catch {
+    throw new TailmuxError("template must be valid JSON", "TAILMUX_TEMPLATE");
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new TailmuxError("template must be an object", "TAILMUX_TEMPLATE");
+  }
+  const raw = value as Record<string, unknown>;
   const panes = raw.panes;
-  invariant(Array.isArray(panes) && panes.length > 0, "template panes must be a non-empty array");
+  if (!Array.isArray(panes) || panes.length === 0) {
+    throw new TailmuxError("template.panes must be a non-empty array", "TAILMUX_TEMPLATE");
+  }
+  if (raw.description !== undefined && typeof raw.description !== "string") {
+    throw new TailmuxError("template.description must be a string", "TAILMUX_TEMPLATE");
+  }
   return {
     name: assertString(raw.name, "template.name"),
-    description: typeof raw.description === "string" ? raw.description : undefined,
+    description: raw.description,
     session: assertString(raw.session, "template.session"),
     panes: panes.map((pane, index) => {
       if (!pane || typeof pane !== "object") throw new TailmuxError(`pane ${index} must be an object`, "TAILMUX_TEMPLATE");
