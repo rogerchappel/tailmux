@@ -38,6 +38,12 @@ and `cwd` fields may be omitted; when present, each must be a non-empty string.
 Empty or non-string values fail with a field-specific `TAILMUX_TEMPLATE` error
 and cannot be silently dropped while creating a launch plan.
 
+The template file must be valid JSON with an object at the top level. It
+requires non-empty string `name` and `session` fields and a non-empty `panes`
+array; optional `description` must be a string. Invalid JSON or container types
+fail with concise template diagnostics without leaking raw `SyntaxError` or
+`TypeError` messages.
+
 Port-file entries are included only when their parsed port is an integer from
 1 through 65535. This applies to both simplified rows such as
 `gpu-box 11434 tcp ollama` and listener-style rows such as
