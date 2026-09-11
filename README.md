@@ -48,6 +48,7 @@ node dist/src/cli.js launch examples/ai-lab.json --execute
 - `scan`: build a status board from explicit Tailscale, SSH, and port files.
 - `status`: alias of `scan` for dashboard-style use.
 - `template`: validate and normalize a workspace JSON template.
+- `init-template`: print a minimal workspace template; add `--session <name>` to set the tmux session name.
 - `launch`: print a tmux command plan; add `--execute` to run it.
 
 ## Live discovery

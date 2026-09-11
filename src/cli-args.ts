@@ -22,7 +22,7 @@ const commandSpecs: Record<string, CommandSpec> = {
     valueFlags: new Set(["session"])
   },
   template: {
-    booleanFlags: new Set(["dry-run", "help"]),
+    booleanFlags: new Set(["help"]),
     valueFlags: new Set()
   },
   launch: {

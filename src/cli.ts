@@ -9,7 +9,7 @@ import { minimalTemplate } from "./template-presets.js";
 import { parseArgs } from "./cli-args.js";
 
 function usage(): string {
-  return `tailmux - local-first Tailscale/tmux workspace helper\n\nCommands:\n  scan [--tailscale file] [--ssh-config file] [--ports file] [--live] [--format table|json]\n  template <file> [--dry-run]
+  return `tailmux - local-first Tailscale/tmux workspace helper\n\nCommands:\n  scan [--tailscale file] [--ssh-config file] [--ports file] [--live] [--format table|json]\n  template <file>
   init-template [--session name]\n  launch <file> [--execute]\n  status [same flags as scan]\n\nSafety:\n  tailmux does not call Tailscale, SSH, or tmux unless --live or --execute is supplied.\n`;
 }
 
