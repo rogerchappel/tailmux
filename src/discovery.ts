@@ -17,16 +17,15 @@ export interface DiscoveryOptions {
   live?: boolean | undefined;
 }
 
-async function readOptional(path: string | undefined, label: string, flag: string, nextStep: string): Promise<string | undefined> {
+async function readOptional(path: string | undefined, label: string, nextStep: string): Promise<string | undefined> {
   if (!path) return undefined;
-  return readNamedFile(path, { label, flag, nextStep });
+  return readNamedFile(path, { label, nextStep });
 }
 
 export async function discoverInventory(options: DiscoveryOptions): Promise<Inventory> {
   let tailscaleText = await readOptional(
     options.tailscalePath,
     "tailscale status file",
-    "tailscale",
     "pass an existing file to --tailscale or omit it to scan without tailscale peers"
   );
   if (!tailscaleText && options.live) {
@@ -46,13 +45,11 @@ export async function discoverInventory(options: DiscoveryOptions): Promise<Inve
   const sshText = await readOptional(
     options.sshConfigPath,
     "ssh config file",
-    "ssh-config",
     "pass an existing file to --ssh-config or omit it to scan without SSH peers"
   );
   const portsText = await readOptional(
     options.portsPath,
     "ports file",
-    "ports",
     "pass an existing file to --ports or omit it to scan without port entries"
   );
   const tailscalePeers = tailscaleText ? parseTailscaleStatus(tailscaleText) : [];

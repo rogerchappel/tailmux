@@ -4,8 +4,6 @@ import { TailmuxError } from "./errors.js";
 export interface NamedFileOptions {
   /** Human name of the input, used as the diagnostic subject. */
   label: string;
-  /** CLI flag that supplies this input, so the diagnostic points at the offending flag. */
-  flag: string;
   /** Concrete next step the operator can act on. */
   nextStep: string;
 }

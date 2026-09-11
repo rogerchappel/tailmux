@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { discoverInventory } from "./discovery.js";
+import { readNamedFile } from "./fs-input.js";
 import { formatCommand, planTmux } from "./planner.js";
 import { renderInventoryJson, renderInventoryTable } from "./render.js";
 import { parseWorkspaceTemplate, stringifyWorkspaceTemplate } from "./template.js";
@@ -38,7 +38,10 @@ async function run(): Promise<number> {
   if (args.command === "template" || args.command === "launch") {
     const file = args.positional[0];
     if (!file) throw new Error(`${args.command} requires a template file`);
-    const template = parseWorkspaceTemplate(await readFile(file, "utf8"));
+    const template = parseWorkspaceTemplate(await readNamedFile(file, {
+      label: "template file",
+      nextStep: "pass an existing workspace template, e.g. tailmux template examples/ai-lab.json"
+    }));
     if (args.command === "template") { process.stdout.write(stringifyWorkspaceTemplate(template)); return 0; }
     const plans = planTmux(template);
     for (const plan of plans) process.stdout.write(`${plan.risk.padEnd(18)} ${formatCommand(plan.command)}\n`);
