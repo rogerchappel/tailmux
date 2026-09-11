@@ -111,6 +111,22 @@ test("CLI scan --live reports a missing tailscale CLI without raw spawn ENOENT",
   assert.doesNotMatch(result.stderr, /ENOENT/);
 });
 
+test("CLI template names a missing template file without raw ENOENT", () => {
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "template", "missing-template.json"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: template file not found: missing-template.json — pass an existing workspace template, e.g. tailmux template examples/ai-lab.json\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /ENOENT/);
+});
+
+test("CLI launch names a missing template file without raw ENOENT", () => {
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "launch", "missing-template.json"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: template file not found: missing-template.json — pass an existing workspace template, e.g. tailmux template examples/ai-lab.json\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /ENOENT/);
+});
+
 test("CLI launch is dry-run by default", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "launch", "examples/ai-lab.json"], { encoding: "utf8" });
   assert.match(stdout, /tmux new-session/);
