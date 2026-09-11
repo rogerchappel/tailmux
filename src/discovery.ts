@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { readNamedFile } from "./fs-input.js";
+import { TailmuxError } from "./errors.js";
 import { parsePorts } from "./ports.js";
 import { parseSshConfig } from "./ssh-config.js";
 import { parseTailscaleStatus } from "./tailscale.js";
@@ -29,8 +30,18 @@ export async function discoverInventory(options: DiscoveryOptions): Promise<Inve
     "pass an existing file to --tailscale or omit it to scan without tailscale peers"
   );
   if (!tailscaleText && options.live) {
-    const { stdout } = await execFileAsync("tailscale", ["status", "--json"], { timeout: 5000 });
-    tailscaleText = stdout;
+    try {
+      const { stdout } = await execFileAsync("tailscale", ["status", "--json"], { timeout: 5000 });
+      tailscaleText = stdout;
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        throw new TailmuxError(
+          "tailscale CLI not found: install the Tailscale CLI or pass a status file with --tailscale instead of --live",
+          "TAILMUX_LIVE"
+        );
+      }
+      throw error;
+    }
   }
   const sshText = await readOptional(
     options.sshConfigPath,

@@ -103,6 +103,14 @@ test("CLI scan names a missing ports file without raw ENOENT", () => {
   assert.doesNotMatch(result.stderr, /ENOENT/);
 });
 
+test("CLI scan --live reports a missing tailscale CLI without raw spawn ENOENT", () => {
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--live"], { encoding: "utf8", env: { ...process.env, PATH: "" } });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: tailscale CLI not found: install the Tailscale CLI or pass a status file with --tailscale instead of --live\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /ENOENT/);
+});
+
 test("CLI launch is dry-run by default", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "launch", "examples/ai-lab.json"], { encoding: "utf8" });
   assert.match(stdout, /tmux new-session/);
