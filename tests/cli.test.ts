@@ -79,6 +79,30 @@ test("CLI help exposes the documented source entry point", () => {
   assert.match(stdout, /scan \[--tailscale file\]/);
 });
 
+test("CLI scan names a missing tailscale status file without raw ENOENT", () => {
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--tailscale", "missing-status.json"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: tailscale status file not found: missing-status.json — pass an existing file to --tailscale or omit it to scan without tailscale peers\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /ENOENT/);
+});
+
+test("CLI scan names a missing ssh config file without raw ENOENT", () => {
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--ssh-config", "missing-ssh-config"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: ssh config file not found: missing-ssh-config — pass an existing file to --ssh-config or omit it to scan without SSH peers\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /ENOENT/);
+});
+
+test("CLI scan names a missing ports file without raw ENOENT", () => {
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "scan", "--ports", "missing-ports.txt"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: ports file not found: missing-ports.txt — pass an existing file to --ports or omit it to scan without port entries\n");
+  assert.equal(result.stdout, "");
+  assert.doesNotMatch(result.stderr, /ENOENT/);
+});
+
 test("CLI launch is dry-run by default", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "launch", "examples/ai-lab.json"], { encoding: "utf8" });
   assert.match(stdout, /tmux new-session/);
