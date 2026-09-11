@@ -127,6 +127,14 @@ test("CLI launch names a missing template file without raw ENOENT", () => {
   assert.doesNotMatch(result.stderr, /ENOENT/);
 });
 
+test("CLI help matches template behavior (no inert --dry-run)", () => {
+  const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "help"], { encoding: "utf8" });
+  assert.doesNotMatch(stdout, /template <file> \[--dry-run\]/);
+  const result = spawnSync(process.execPath, ["dist/src/cli.js", "template", "--dry-run", "examples/ai-lab.json"], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.equal(result.stderr, "tailmux: unknown option: --dry-run\n");
+});
+
 test("CLI launch is dry-run by default", () => {
   const stdout = execFileSync(process.execPath, ["dist/src/cli.js", "launch", "examples/ai-lab.json"], { encoding: "utf8" });
   assert.match(stdout, /tmux new-session/);
